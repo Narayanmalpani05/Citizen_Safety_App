@@ -1,0 +1,73 @@
+# =========================
+# Large ML model
+# Uploaded separately as GitHub Release asset
+# =========================
+ml_backend/model.pkl
+
+# =========================
+# Android / Gradle generated files
+# =========================
+.gradle/
+build/
+app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# =========================
+# Android Studio / IntelliJ files
+# =========================
+.idea/
+*.iml
+local.properties
+
+# =========================
+# APK / AAB output files
+# =========================
+*.apk
+*.aab
+
+# =========================
+# Signing keys / private release files
+# =========================
+*.jks
+*.keystore
+release.keystore
+keystore.properties
+
+# =========================
+# Python environment / cache
+# =========================
+ml_backend/venv/
+venv/
+env/
+__pycache__/
+ml_backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+
+# =========================
+# Dataset / large training files
+# =========================
+*.csv
+ML assets/
+dataset.csv
+urldata.csv
+
+# =========================
+# Temporary / generated files
+# =========================
+out/
+production/
+test/
+pdf_text.txt
+read_pdf.py
+github_link.txt
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
