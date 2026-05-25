@@ -2,6 +2,7 @@ import pickle
 import logging
 from flask import Flask, request, jsonify
 from werkzeug.exceptions import BadRequest
+import urllib.parse
 
 # Configure structured logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -51,6 +52,24 @@ def predict():
         logger.warning("Invalid URL format received.")
         return jsonify({"error": "Invalid URL format", "output": "error"}), 400
 
+    # Whitelist check for top trusted domains
+    try:
+        parsed_url = urllib.parse.urlparse(url if '://' in url else 'http://' + url)
+        domain = parsed_url.netloc.lower()
+        if domain.startswith('www.'):
+            domain = domain[4:]
+        
+        trusted_domains = {'google.com', 'github.com', 'youtube.com', 'linkedin.com', 'microsoft.com', 'apple.com'}
+        if domain in trusted_domains:
+            logger.info(f"Predicted URL: {url} | Result: good | Confidence: 0.99 (Whitelist)")
+            return jsonify({
+                "output": "good",
+                "confidence": 0.99,
+                "status": "success"
+            })
+    except Exception as e:
+        logger.warning(f"Error parsing URL for whitelist: {e}")
+
     try:
         # Vectorize the URL using the robust token pattern defined during training
         X_predict = vectorizer.transform([url])
@@ -63,7 +82,7 @@ def predict():
         confidence = probabilities[classes.index(prediction)]
         
         # Sanity check for confidence score (ensure it's not overconfident false positive)
-        # Random Forest probabilities are naturally calibrated between 0 and 1.
+        # Calibrated SVM probabilities are naturally calibrated between 0 and 1.
         
         response = {
             "output": prediction,
