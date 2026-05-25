@@ -1,7 +1,8 @@
 import pandas as pd
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import LinearSVC
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
@@ -28,15 +29,17 @@ def train_model():
     url_list = urls_data["URL"]
 
     # Using robust regex tokenizer for URLs (extracting alphanumeric tokens)
-    vectorizer = TfidfVectorizer(token_pattern=r'[A-Za-z0-9]+', lowercase=True, max_features=10000)
+    # Ignore http, https, and www as they cause false positives due to dataset bias
+    vectorizer = TfidfVectorizer(token_pattern=r'[A-Za-z0-9]+', lowercase=True, max_features=10000, stop_words=['http', 'https', 'www'])
     print("Vectorizing data...")
     X = vectorizer.fit_transform(url_list)
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
-    print("Training Random Forest model...")
-    # Random Forest automatically provides well-calibrated probabilities via predict_proba
-    clf = RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1, class_weight='balanced')
+    print("Training Calibrated LinearSVC model...")
+    # CalibratedLinearSVC automatically provides well-calibrated probabilities via predict_proba
+    base_clf = LinearSVC(random_state=42, class_weight='balanced', dual=False)
+    clf = CalibratedClassifierCV(base_clf, cv=3)
     clf.fit(X_train, y_train)
     
     # Validation
