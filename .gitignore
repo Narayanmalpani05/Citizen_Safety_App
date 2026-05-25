@@ -1,10 +1,4 @@
 # =========================
-# Large ML model
-# Uploaded separately as GitHub Release asset
-# =========================
-ml_backend/model.pkl
-
-# =========================
 # Android / Gradle generated files
 # =========================
 .gradle/
@@ -36,11 +30,11 @@ release.keystore
 keystore.properties
 
 # =========================
-# Python environment / cache
+# Python virtual environment / cache
 # =========================
-ml_backend/venv/
 venv/
 env/
+ml_backend/venv/
 __pycache__/
 ml_backend/__pycache__/
 *.pyc
@@ -52,12 +46,21 @@ ml_backend/__pycache__/
 # Dataset / large training files
 # =========================
 *.csv
-ML assets/
 dataset.csv
 urldata.csv
+ML assets/
 
 # =========================
-# Temporary / generated files
+# Temporary debug/testing scripts
+# Keep only if you intentionally want them in repo
+# =========================
+ml_backend/debug_dataset.py
+ml_backend/debug_dataset2.py
+ml_backend/debug_predict.py
+ml_backend/test_app.py
+
+# =========================
+# Generated / temporary folders
 # =========================
 out/
 production/
