@@ -42,6 +42,8 @@ To deploy the backend to a cloud provider like Render, Railway, or Heroku:
 3. The provider will automatically detect the `requirements.txt`, `Procfile` (`web: gunicorn app:app`), and `runtime.txt`.
 4. Once deployed, note your new HTTPS URL (e.g., `https://my-app.onrender.com/`).
 
+> **Note on Render Deployment**: Due to Render Free's 512MB RAM constraints, the original memory-heavy RandomForest model has been replaced with a highly optimized, lightweight **Calibrated LinearSVC** model. This reduces the model size from ~487MB to ~0.23MB while retaining 95%+ accuracy and confidence scoring via probability calibration, fitting perfectly within the Render constraints without Git LFS.
+
 ## Production Deployment (Android)
 To release the Android app:
 1. Open `ApiClient.java` and update `BASE_URL_PROD` to your deployed HTTPS URL.
